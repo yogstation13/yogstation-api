@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Repository
-public interface PermissionRepository extends JpaRepository {
+public interface PermissionRepository extends JpaRepository<PermissionEntity, Integer> {
     Stream<PermissionEntity> findByUserGroupInOrUser(List<Integer> groupIds, int user);
 }

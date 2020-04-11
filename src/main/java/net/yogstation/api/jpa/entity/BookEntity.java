@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Table(name = "erro_library")
