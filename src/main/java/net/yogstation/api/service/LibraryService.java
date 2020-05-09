@@ -13,8 +13,12 @@ import org.springframework.stereotype.Service;
 public class LibraryService {
     private BookRepository bookRepository;
 
-    public Page<BookEntity> getBooks(int page) {
-        return bookRepository.findAll(isDeleted(), PageRequest.of(page, 25));
+    public Page<BookEntity> getBooks(int page, int size, boolean showDeleted) {
+        if(showDeleted) {
+            return bookRepository.findAll(PageRequest.of(page, size));
+        } else {
+            return bookRepository.findAll(isDeleted(), PageRequest.of(page, size));
+        }
     }
 
     private Specification<BookEntity> isDeleted() {

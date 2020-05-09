@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class XenforoUser {
-    private int userGroupId;
+    private Integer userGroupId;
     private List<Integer> secondaryGroupIds;
     private String username;
     private int userId;

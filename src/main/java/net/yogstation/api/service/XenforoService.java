@@ -1,5 +1,6 @@
 package net.yogstation.api.service;
 
+import net.yogstation.api.bean.xenforo.XenforoResponse;
 import net.yogstation.api.bean.xenforo.XenforoUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,7 +20,7 @@ public class XenforoService {
     private String xenforoLoginUrl;
     private String xenforoApiToken;
 
-    public XenforoService(@Value("${xenforo.api.login}") String xenforoLoginUrl, @Value("${xenforo.token}") String xenforoToken) {
+    public XenforoService(@Value("${xenforo.api.login}") String xenforoLoginUrl, @Value("${xenforo.token:default}") String xenforoToken) {
         this.xenforoLoginUrl = xenforoLoginUrl;
         this.xenforoApiToken = xenforoToken;
     }
@@ -39,7 +40,8 @@ public class XenforoService {
         HttpEntity<MultiValueMap> entity = new HttpEntity<>(requestMap, headers);
 
         try {
-            return restTemplate.postForEntity(xenforoLoginUrl, entity, XenforoUser.class).getBody();
+            XenforoResponse response = restTemplate.postForEntity(xenforoLoginUrl, entity, XenforoResponse.class).getBody();
+            return response.getUser();
         } catch (HttpClientErrorException.BadRequest e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Username/Password");
         }

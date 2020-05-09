@@ -1,10 +1,8 @@
 package net.yogstation.api.bean;
 
 import lombok.AllArgsConstructor;
-import net.yogstation.api.bean.xenforo.XenforoUser;
 import net.yogstation.api.service.LoginService;
 import net.yogstation.api.service.TokenService;
-import net.yogstation.api.service.XenforoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +22,7 @@ public class AuthorizationRequestInterceptor implements HandlerInterceptor {
     private TokenService tokenService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null) {
@@ -47,7 +45,7 @@ public class AuthorizationRequestInterceptor implements HandlerInterceptor {
     }
 
     public void doBasicLogin(String authorization, String ip) {
-        String[] passwordAndUsername = Base64.getEncoder().encodeToString(authorization.getBytes()).split(":");
+        String[] passwordAndUsername = new String(Base64.getDecoder().decode(authorization)).split(":");
 
         if (passwordAndUsername.length != 2) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid authorization header");

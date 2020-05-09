@@ -2,10 +2,7 @@ package net.yogstation.api.jpa.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +15,7 @@ public class BookEntity {
 
     private String author;
     private String title;
+    @Column(columnDefinition="mediumtext")
     private String content;
     private String category;
     private String ckey;
