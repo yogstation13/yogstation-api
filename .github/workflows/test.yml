@@ -21,4 +21,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Sonar Scan
+      env:
+        GITHUB_TOKEN : ${{secrets.GITHUB_TOKEN}}
       run: mvn verify sonar:sonar -P development -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=${{secrets.SONAR_PROJECT_KEY}} -Dsonar.organization=${{secrets.SONAR_ORGANIZATION}} -Dsonar.login=${{secrets.SONAR_LOGIN}}
