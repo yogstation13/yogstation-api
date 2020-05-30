@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class TokenService {
     private static final int TOKEN_LENGTH = 64;
     private static final int TOKEN_GENERATE_RETRY_TIMES = 5;
 
-    private Random random = new Random();
+    private Random random = new SecureRandom();
 
     private TokenRepository tokenRepository;
 
