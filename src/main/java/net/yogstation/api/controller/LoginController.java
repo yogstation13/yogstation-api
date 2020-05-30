@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class LoginController {
     }
 
     @GetMapping("/api/v1/permissions")
-    public List<String> getPermissions() {
+    public Set<String> getPermissions() {
         return authorizedSession.getPermissions();
     }
 }

@@ -2,9 +2,10 @@ package net.yogstation.api.service.impl;
 
 import lombok.AllArgsConstructor;
 import net.yogstation.api.bean.xenforo.XenforoUser;
-import net.yogstation.api.jpa.entity.PermissionEntity;
-import net.yogstation.api.jpa.repository.PermissionRepository;
+import net.yogstation.api.jpa.entity.UserEntity;
+import net.yogstation.api.jpa.repository.UserRepository;
 import net.yogstation.api.service.LoginService;
+import net.yogstation.api.service.PermissionService;
 import net.yogstation.api.service.TokenService;
 import net.yogstation.api.service.XenforoService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -21,24 +22,33 @@ public class ProductionLoginService implements LoginService {
 
     private XenforoService xenforoService;
     private TokenService tokenService;
-    private PermissionRepository permissionRepository;
+    private PermissionService permissionService;
+
+    private UserRepository userRepository;
 
     @Override
     public String login(String username, String password, String ip) {
         XenforoUser xenforoUser = xenforoService.login(username, password, ip);
 
-        List<String> permissions = permissionRepository.findByUserGroupInOrUser(getGroupIds(xenforoUser), xenforoUser.getUserId())
-                .stream().map(PermissionEntity::getPermission).collect(Collectors.toList());
+        UserEntity userEntity = userRepository.findById(xenforoUser.getUserId()).orElse(null);
 
-        return tokenService.generateToken(xenforoUser.getUsername(), permissions);
+        if (userEntity == null) {
+            userEntity = new UserEntity();
+            userEntity.setId(xenforoUser.getUserId());
+
+            userEntity = userRepository.save(userEntity);
+        }
+
+        return tokenService.generateToken(userEntity);
     }
 
     @Override
-    public List<String> nonTokenLogin(String username, String password, String ip) {
-        XenforoUser xenforoUser = xenforoService.login(username, password, ip);
+    public Set<String> getPermissions(String token) {
+        UserEntity userEntity = tokenService.getUser(token);
 
-        return permissionRepository.findByUserGroupInOrUser(getGroupIds(xenforoUser), xenforoUser.getUserId())
-                .stream().map(PermissionEntity::getPermission).collect(Collectors.toList());
+        XenforoUser xenforoUser = xenforoService.getUser(userEntity.getId());
+
+        return permissionService.getPermissions(getGroupIds(xenforoUser), xenforoUser.getUserId());
     }
 
     private List<Integer> getGroupIds(XenforoUser user) {

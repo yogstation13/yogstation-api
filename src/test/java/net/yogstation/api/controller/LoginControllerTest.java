@@ -29,17 +29,13 @@ public class LoginControllerTest {
     @Autowired
     private AuthorizedSession authorizedSession;
 
-    private Algorithm algorithm = Algorithm.HMAC256("secret");
-
     @Test
     public void test_login() {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
         LoginRequest loginRequest = new LoginRequest("user", "password");
 
-        String token = loginController.login(loginRequest, request);
-
-        algorithm.verify(JWT.decode(token));
+        Assert.assertEquals("user", loginController.login(loginRequest, request));
     }
 
     @Test
@@ -94,8 +90,6 @@ public class LoginControllerTest {
 
         LoginRequest loginRequest = new LoginRequest("user", "password");
 
-        String token = loginController.login(loginRequest, request);
-
-        algorithm.verify(JWT.decode(token));
+        Assert.assertEquals("user", loginController.login(loginRequest, request));
     }
 }

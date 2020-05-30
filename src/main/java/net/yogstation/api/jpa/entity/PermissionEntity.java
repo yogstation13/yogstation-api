@@ -1,5 +1,6 @@
 package net.yogstation.api.jpa.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "yg_permission")
 @Data
+@Builder
 public class PermissionEntity {
     @Id
     @GeneratedValue

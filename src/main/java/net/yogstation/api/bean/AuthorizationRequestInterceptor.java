@@ -2,7 +2,6 @@ package net.yogstation.api.bean;
 
 import lombok.AllArgsConstructor;
 import net.yogstation.api.service.LoginService;
-import net.yogstation.api.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
-import java.util.List;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -19,7 +18,6 @@ public class AuthorizationRequestInterceptor implements HandlerInterceptor {
 
     private LoginService loginService;
     private AuthorizedSession authorizedSession;
-    private TokenService tokenService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -29,15 +27,17 @@ public class AuthorizationRequestInterceptor implements HandlerInterceptor {
             String[] authorizationHeaderComponents = authorizationHeader.split(" ");
 
             if (authorizationHeaderComponents.length != 2) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid authorization header");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Unexpected Authorization header length, got " + authorizationHeaderComponents.length + " components expected 2");
             }
 
             if ("Basic".equalsIgnoreCase(authorizationHeaderComponents[0])) {
                 doBasicLogin(authorizationHeaderComponents[1], request.getRemoteAddr());
             } else if ("Bearer".equalsIgnoreCase(authorizationHeaderComponents[0])) {
-                doBearerLogin(authorizationHeaderComponents[0]);
+                doBearerLogin(authorizationHeaderComponents[1]);
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid authorization header");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Unexpected authorization header, got " + authorizationHeaderComponents[0] + " expected Basic/Bearer");
             }
         }
 
@@ -48,14 +48,17 @@ public class AuthorizationRequestInterceptor implements HandlerInterceptor {
         String[] passwordAndUsername = new String(Base64.getDecoder().decode(authorization)).split(":");
 
         if (passwordAndUsername.length != 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid authorization header");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Unexpected basic authorization header length, got " + passwordAndUsername.length + " components expected 2");
         }
 
-        authorizedSession.setPermissions(loginService.nonTokenLogin(passwordAndUsername[0], passwordAndUsername[1], ip));
+        String token = loginService.login(passwordAndUsername[0], passwordAndUsername[1], ip);
+
+        authorizedSession.setPermissions(loginService.getPermissions(token));
     }
 
     public void doBearerLogin(String token) {
-        List<String> permissions = tokenService.getPermissions(token);
+        Set<String> permissions = loginService.getPermissions(token);
 
         authorizedSession.setPermissions(permissions);
     }

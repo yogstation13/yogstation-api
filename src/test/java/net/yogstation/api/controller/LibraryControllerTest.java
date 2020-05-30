@@ -2,7 +2,7 @@ package net.yogstation.api.controller;
 
 import net.yogstation.api.bean.AuthorizedSession;
 import net.yogstation.api.jpa.entity.BookEntity;
-import org.assertj.core.util.Lists;
+import org.assertj.core.util.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,7 +47,7 @@ public class LibraryControllerTest {
 
     @Test
     public void test_getBooks_DeletedPermissions() {
-        List<String> permissions = Lists.list("library.books.deleted");
+        Set<String> permissions = Sets.newLinkedHashSet("library.books.deleted");
         authorizedSession.setPermissions(permissions);
 
         Page<BookEntity> books = libraryController.getBooks(0, 25, true);
@@ -60,7 +60,7 @@ public class LibraryControllerTest {
 
     @Test
     public void test_getBooks_CkeyPermissions() {
-        List<String> permissions = Lists.list("library.books.ckey");
+        Set<String> permissions = Sets.newLinkedHashSet("library.books.ckey");
         authorizedSession.setPermissions(permissions);
 
         Page<BookEntity> books = libraryController.getBooks(0, 25, true);
