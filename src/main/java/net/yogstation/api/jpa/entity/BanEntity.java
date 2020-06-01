@@ -14,7 +14,7 @@ public class BanEntity {
     private int id;
 
     private String ckey;
-    private String a_ckey;
+    private String aCkey;
     @Column(columnDefinition="mediumtext")
     private String reason;
     private LocalDateTime expirationTime;
@@ -22,4 +22,6 @@ public class BanEntity {
     private LocalDateTime bantime;
     private String role;
     private int roundId;
+    private int ip;
+    private String computerid; // Why is this a string containing a number???
 }
