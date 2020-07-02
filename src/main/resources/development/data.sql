@@ -8,3 +8,11 @@ INSERT INTO `erro_library` (`id`,`author`,`title`,`content`,`category`,`ckey`,`d
 INSERT INTO `erro_library` (`id`,`author`,`title`,`content`,`category`,`ckey`,`datetime`,`deleted`,`round_id_created`) VALUES (1932,'Anonymous','Darth Sidious','<font face=\"Comic Sans MS\" color=\"red\"><b>HONK HONK HONK HONK HONK HONK HONK<br>HOOOOOOOOOOOOOOOOOOOOOONK<br>APRIL FOOLS</b></font>','Religion','ckey6','2020-04-05 19:51:46',1,28644);
 INSERT INTO `erro_library` (`id`,`author`,`title`,`content`,`category`,`ckey`,`datetime`,`deleted`,`round_id_created`) VALUES (1931,'Anonymous','Darth Sidious','<font face=\"Comic Sans MS\" color=\"red\"><b>HONK HONK HONK HONK HONK HONK HONK<br>HOOOOOOOOOOOOOOOOOOOOOONK<br>APRIL FOOLS</b></font>','Religion','ckey6','2020-04-05 19:50:31',1,28644);
 INSERT INTO `erro_library` (`id`,`author`,`title`,`content`,`category`,`ckey`,`datetime`,`deleted`,`round_id_created`) VALUES (1930,'Anonymous','Darth Sidious','<font face=\"Comic Sans MS\" color=\"red\"><b>HONK HONK HONK HONK HONK HONK HONK<br>HOOOOOOOOOOOOOOOOOOOOOONK<br>APRIL FOOLS</b></font>','Religion','ckey6','2020-04-05 19:50:17',NULL,28644);
+
+INSERT INTO `erro_ban` (`id`, `bantime`, `round_id`, `role`, `expiration_time`, `reason`, `ckey`, `ip`, `computerid`, `a_ckey`, `unbanned_datetime`,) VALUES
+(1, '2014-05-04 23:21:19', 0, 'Server', NULL, 'Killed as a non antag because he was bored, and then logged out. ', 'scof', 1111111111, '1111111111', '05rhardy', '2015-11-18 10:48:11'),
+(2, '2014-05-05 11:34:33', 0, 'Server', NULL, 'Joined as captain, started shooting his laser gun around, and then logged off.', 'sneakytiki', 1111111111, '1111111111',  'firestorm258', '2015-11-18 10:48:11'),
+(3, '2014-05-05 17:44:33', 0, 'Chemist', NULL, 'Firing spacelube', 'deathbenotproud', 1111111111, '1111111111', '05rhardy', '2015-11-18 10:48:11'),
+(4, '2014-05-05 17:44:45', 0, 'Janitor', NULL, 'Firing space lube', 'deathbenotproud', 1111111111, '1111111111', '05rhardy', '2015-11-18 10:48:11'),
+(5, '2014-05-05 21:06:45', 0, 'Server', '2014-05-06 21:06:45', 'Beat the clown to death for messing around in medbay', 'wolffkran', 1111111111, '1111111111', 'oakboscage', '2015-11-18 10:48:11');
+
